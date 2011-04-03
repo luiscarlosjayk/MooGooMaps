@@ -1,5 +1,5 @@
 MooGooMaps
-================
+==========
 
 Extends Google Maps Javascript Api to make it easier to implement and expand it's functionality thanks to MooTools magic.
 
