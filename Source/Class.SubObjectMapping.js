@@ -8,7 +8,7 @@ description: SubObjectMapping
 license: MIT-style license
 
 authors:
-	- Thomas Allmer
+  - Thomas Allmer
 
 requires: [Core/Class, Core/Object]
 
