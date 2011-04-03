@@ -1,5 +1,4 @@
--name: MooGooMaps
--author: Ciul
--category: Interface
--tags: [map, googlemaps, googlemap]
-#current 1.0
+name: MooGooMaps
+author: [Ciul, Thomas Allmer]
+category: Interface
+tags: [map, googlemaps, googlemap]
