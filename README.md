@@ -104,3 +104,23 @@ Easy Setup from a XML file
 				url="resources/test.html"
 			/>
 		</Map>
+
+Having Fun with Plugins
+-----------------------
+	
+	The posibilities are inifinite. What do you want to do is up to you and your needs.
+	Try the plugins as how they are until now (development but already functional).
+	
+	To use actual plugins, only include the respective js script file and that's it.
+	You will see customizable buttons (through css rules) in the right top corner of the map.
+	Don't be afraid and click them!
+	
+	Plugins:
+		- Bounds by Thomas Allmer:
+			It creates a rectangle which can be resized through two draggable markers.
+			On clicked inside of it, an InfoWindow with the coordinates of the center of the rectangle will pop up.
+			
+		- Skeeker by Ciul:
+			It creates a circle which can be resized through a dragganle marker.
+			While resizing or dragging the map, it will show those markers inside the circle (search scope)
+			and hide those markers outside the circle bounds. It is like a filter glass for markers :P

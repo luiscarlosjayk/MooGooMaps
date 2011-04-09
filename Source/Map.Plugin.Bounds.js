@@ -41,7 +41,8 @@ Map.implement({
 							}.bind(this),
 							onDragstart: function() {
 								this.plugins.bounds.infoWindow.close();
-							}.bind(this)
+							}.bind(this),
+							isPlugin: true
 						};
 						
 						this.plugins.bounds.marker1 = new Map.Marker(point1, this.mapObj, options);

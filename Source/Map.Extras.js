@@ -73,10 +73,11 @@ Array.implement({
 	},
 	
 	distanceTo: function(p2) {
-		if(typeOf(p2) === 'array' && p2.length === 2 && typeOf(p2[0]) === 'number' && typeOf(p2[1]) === 'number' ) {
-			return Map.geometry.computeDistanceBetween(this, p2);
+		if(this.length === 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number') {
+			if(typeOf(p2) === 'array' && p2.length === 2 && typeOf(p2[0]) === 'number' && typeOf(p2[1]) === 'number' ) {
+				return Map.geometry.computeDistanceBetween(this, p2);
+			}
 		}
-		
 		return 0;
 	}
 

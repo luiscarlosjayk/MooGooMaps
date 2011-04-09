@@ -52,10 +52,10 @@ var Map = new Class({
 		// load registered Plugins
 		this.plugins = Object.merge(this.plugins, this.options.plugins);
 		Object.each(this.plugins, function(plugin) {
-			if (plugin.html && plugin.onClick) {
+			if (plugin.html && plugin.onClick && !plugin.el) {
 				this.addControl(plugin.html, plugin.onClick, plugin.options);
 			}
-			if (plugin.el) {
+			else if (plugin.el) {
 				this.addControlElement(plugin.el, plugin.options);
 			}
 		}, this);
@@ -63,9 +63,10 @@ var Map = new Class({
 
 	addControl: function(html, userFunction, options) {
 		var wrapper = new Element('div');
+		var klass = options.klass ? options.klass : 'googleButton';
 		var el = new Element('div', {
 			html: html, 
-			'class': 'googleButton'
+			'class': klass
 		});
 		el.addEvent('click', userFunction.bind(this, el));
 		wrapper.grab(el);

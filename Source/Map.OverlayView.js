@@ -15,13 +15,6 @@ requires: [Map]
 
 provides: [Map.OverlayView]
 
-...
-*/
-
-
-/*
----
-
 google maps possible Map Panes:
 	floatPane (Pane 6)
 		This pane contains the info window. It is above all map overlays.
@@ -40,7 +33,7 @@ google maps possible Map Panes:
 	mapPane (Pane 0)
 		This pane is the lowes pane and is above the tiles.
 
-...
+---
 */
 
 Map.OverlayView = new Class({
