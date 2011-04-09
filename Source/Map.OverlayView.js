@@ -15,7 +15,11 @@ requires: [Map]
 
 provides: [Map.OverlayView]
 
-google maps possible Map Panes:
+*/
+
+/*
+	google maps possible Map Panes:
+	-------------------------------
 	floatPane (Pane 6)
 		This pane contains the info window. It is above all map overlays.
 	overlayMouseTarget (Pane 5)
@@ -32,11 +36,10 @@ google maps possible Map Panes:
 		This pane contains polylines, polygons, ground overlays and tile layer overlays.
 	mapPane (Pane 0)
 		This pane is the lowes pane and is above the tiles.
-
----
+	
 */
 
-Map.OverlayView = new Class({
+Map.OverlayView = new Class({aa
 	
 	Extends: google.maps.OverlayView,
 	Implements: [Events],
