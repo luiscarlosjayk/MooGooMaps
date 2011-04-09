@@ -15,6 +15,7 @@ requires: [Map]
 
 provides: [Map.OverlayView]
 
+...
 */
 
 /*
