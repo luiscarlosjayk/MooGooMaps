@@ -17,7 +17,7 @@ provides: [SubObjectMapping]
 ...
 */
 
-this.SubObjectMapping = new Class({
+SubObjectMapping = new Class({
 
 	mapToSubObject: function() {
 		Object.each(this.subObjectMapping, function(subObjectOptions, subObject) {
