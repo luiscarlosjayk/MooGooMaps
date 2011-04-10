@@ -40,10 +40,9 @@ provides: [Map.OverlayView]
 	
 */
 
-Map.OverlayView = new Class({aa
+Map.OverlayView = new Class({
 	
-	Extends: google.maps.OverlayView,
-	Implements: [Events],
+	Implements: [Events, google.maps.OverlayView],
 	
 	wrapper: null,
 	el: null,
