@@ -124,3 +124,10 @@ Having Fun with Plugins
 			It creates a circle which can be resized through a dragganle marker.
 			While resizing or dragging the map, it will show those markers inside the circle (search scope)
 			and hide those markers outside the circle bounds. It is like a filter glass for markers :P
+		- Marker Filter by Ciul:
+			It filters markers according to a marker option you set, matched against strings inside an Array.
+			These will be show/hide according to checboxed created from the strings in that Array.
+			To better understand, let's say markers keep a isType option with values like "restaurant",
+			"hotel", "school", "park", else. Then there will be created a checkbox for each one.
+			Now, on "hotel" checkbox checked, it displays those markers that match for that.
+			It is also, totally customizable through options and CSS styles.
