@@ -43,7 +43,7 @@ Map.implement({
 						Array.each(this.markers, function(marker) { // Preserve markers visible state.
 							marker.isVisible = marker.getVisible();
 						}, this);
-						log('create');
+						
 						//create
 						this.plugins.seeker.circle = this.createCircle(center, distance, {});
 						this.plugins.seeker.circle.circleObj.bindTo('center', this.mapObj);
@@ -100,6 +100,7 @@ Map.implement({
 					Array.each(this.markers, function(marker) { // Return previous markers visible state.
 						if(marker.options.isPlugin === undefined || marker.options.isPlugin === null) {
 							marker.setVisible(marker.isVisible);
+							delete marker.isVisible;
 						}
 					}, this);
 					el.removeClass('goolgeButtonActive');
