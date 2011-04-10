@@ -120,7 +120,7 @@ Having Fun with Plugins
 			It creates a rectangle which can be resized through two draggable markers.
 			On clicked inside of it, an InfoWindow with the coordinates of the center of the rectangle will pop up.
 			
-		- Skeeker by Ciul:
+		- Marker Seeker by Ciul:
 			It creates a circle which can be resized through a dragganle marker.
 			While resizing or dragging the map, it will show those markers inside the circle (search scope)
 			and hide those markers outside the circle bounds. It is like a filter glass for markers :P
