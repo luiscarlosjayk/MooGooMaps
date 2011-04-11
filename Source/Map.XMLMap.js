@@ -19,6 +19,7 @@ provides: [Map.XMLMap]
 */
 
 Map.XMLMap = new Class({
+	Implements: [Events],
 	
 	xmlObj: null,
 	map: null,
@@ -39,7 +40,7 @@ Map.XMLMap = new Class({
 			{
 				this.feedMap();
 			}
-			
+			this.fireEvent('complete', [this.map]);
 		}.bind(this));
 	}.protect(),
 	
