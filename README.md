@@ -15,18 +15,18 @@ How to use
 		<head>
 			<meta name="viewport" content="initialscale=1.0, userscalable=no" />
 			<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false" />
+			<script type="text/javascript" src="MooGooMaps/Sourcescripts" /> // Here, include the MooGooMaps files you will need for you application
+			
 			[... whatever else you have in your document head]
-			<script type="text/javascript" src="MooGooMaps/Sourcescripts" /> // Here, include the MooGooMaps files
-			you will need for you application
-		
-		and at Document Body, you could have a Div element like this:
 		</head>
 		
 		<body>
+			//and at Document Body, you could have a Div element like this:
 			<style type="text/css">
 			  #map_canvas { width: 100%; height: 100%; }
 			</style>
 			<div id="map_canvas"></div>
+			
 			[... whatever else code you have in your document body]
 		</body>
 	</html>
@@ -36,7 +36,7 @@ How to use
 	After that you could include only those scripts that you will need for your application.
 	
 	For example, to create markers in your map, you will need the Map.Marker.js file for that.
-	File's names are very verbose so you could intuit why are they for.
+	File's names are very verbose so you could intuit what are they for.
 	
 	For classes extended from Google Maps Api, do not forget to see their documentation at http://code.google.com/intl/en/apis/maps/documentation/javascript/reference.html
 	for more details on options and events you can use.
