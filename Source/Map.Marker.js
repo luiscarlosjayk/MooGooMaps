@@ -39,6 +39,7 @@ Map.Marker = new Class({
 	
 	initialize: function (position, map, options) {
 		this.setOptions(options);
+		this.initOptions();
 		
 		// we can't use position or map with options, as it is needed as a reference and not as a copy like setOptions would create it
 		this.options.position = typeOf(position) === 'array' ? position.toLatLng() : position;
@@ -76,6 +77,30 @@ Map.Marker = new Class({
 		}
 		
 		return 0;
+	},
+	
+	initOptions: function() {
+		if (typeOf(this.options.icon) === 'object') {
+			this.options.icon.size = typeOf(this.options.icon.size) === 'array' ? this.options.icon.size.toSize() : this.options.icon.size;
+			this.options.icon.origin = typeOf(this.options.icon.origin) === 'array' ? this.options.icon.origin.toPoint() : this.options.icon.origin;
+			this.options.icon.anchor = typeOf(this.options.icon.anchor) === 'array' ? this.options.icon.anchor.toPoint() : this.options.icon.anchor;
+			this.options.icon.scaledSize = typeOf(this.options.icon.scaledSize) === 'array' ? this.options.icon.scaledSize.toSize() : this.options.icon.scaledSize;
+			this.options.icon = new google.maps.MarkerImage(this.options.icon.url, this.options.icon.size, this.options.icon.origin, this.options.icon.anchor, this.options.icon.scaledSize);
+		}
+		if (typeOf(this.options.icon) === 'string' && this.options.icon.lenght > 0) {
+			this.options.icon = new google.maps.MarkerImage(this.options.icon.url);
+		}
+		
+		if (typeOf(this.options.shadow) === 'object') {
+			this.options.shadow.size = typeOf(this.options.shadow.size) === 'array' ? this.options.shadow.size.toSize() : this.options.shadow.size;
+			this.options.shadow.origin = typeOf(this.options.shadow.origin) === 'array' ? this.options.shadow.origin.toPoint() : this.options.shadow.origin;
+			this.options.shadow.anchor = typeOf(this.options.shadow.anchor) === 'array' ? this.options.shadow.anchor.toPoint() : this.options.shadow.anchor;
+			this.options.shadow.scaledSize = typeOf(this.options.shadow.scaledSize) === 'array' ? this.options.shadow.scaledSize.toSize() : this.options.shadow.scaledSize;
+			this.options.shadow = new google.maps.MarkerImage(this.options.shadow.url, this.options.shadow.size, this.options.shadow.origin, this.options.shadow.anchor, this.options.shadow.scaledSize);
+		}
+		if (typeOf(this.options.shadow) === 'string' && this.options.shadow.lenght > 0) {
+			this.options.shadow = new google.maps.MarkerImage(this.options.shadow.url);
+		}
 	},
 	
 	hide: function() {
@@ -116,6 +141,14 @@ Map.implement({
 		var marker = new Map.Marker(position, this.mapObj, options);
 		this.markers.push(marker);
 		return marker;
+	},
+	
+	getMarkers: function() {
+		return this.markers;
+	},
+	
+	setMarkers: function(markers) {
+		this.markers = markers;
 	},
 	
 	zoomToMarkers: function(markers, useOnlyVisible) {
