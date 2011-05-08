@@ -49,7 +49,7 @@ How to use
 How to create a Map
 -------------------
 	
-	var map = Map('map_canvas', [10.979,74.807], {zoom: 10});
+	var map = new Map('map_canvas', [10.979,74.807], {zoom: 10});
 	You can use other Google Maps Api, Map class options as well as for other classes.
 	
 How to create a Marker
