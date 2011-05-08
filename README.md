@@ -15,7 +15,12 @@ How to use
 		<head>
 			<meta name="viewport" content="initialscale=1.0, userscalable=no" />
 			<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false" />
-			<script type="text/javascript" src="MooGooMaps/Sourcescripts" /> // Here, include the MooGooMaps files you will need for you application
+			<script type="text/javascript" src="MooGooMaps/Class.SubObjectMapping.js" />
+			<!-- <script type="text/javascript" src="MooGooMaps/XML2Js.js" /> --> // If Map will be created from a XML file.
+			<script type="text/javascript" src="MooGooMaps/Map.js" /> // This is the one which creates maps.
+			<script type="text/javascript" src="MooGooMaps/Map.Extras.js" /> // This adds required features to Map Class.
+			<script type="text/javascript" src="MooGooMaps/Map.Marker.js" /> // To create markers in your maps.
+			<script type="text/javascript" src="MooGooMaps/Sourcescripts" /> // Here, include the rest of MooGooMaps files you will need for you application.
 			
 			[... whatever else you have in your document head]
 		</head>
@@ -54,7 +59,7 @@ How to create a Marker
 	One is create the object and then set it's map, another is create it directly from the map object.
 	
 	1-
-		var map = Map('map_canvas', [10.979,74.807], {zoom: 10});
+		var map = new Map('map_canvas', [10.979,74.807], {zoom: 10});
 		var marker = new Map.Marker([10.979,74.807]);
 		marker.setMap(map.getMap());
 	
