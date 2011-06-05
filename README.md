@@ -64,7 +64,7 @@ How to create a Marker
 		marker.setMap(map.getMap());
 	
 	2-
-		var map = Map('map_canvas', [10.979,74.807], {zoom: 10});
+		var map = new Map('map_canvas', [10.979,74.807], {zoom: 10});
 		map.createMarker([10.979,74.807]);
 	
 	Yes. As you can notice, the latter is easier, shorter, and usually more recommended to use.
