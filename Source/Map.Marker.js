@@ -2,17 +2,12 @@
 ---
 
 name: Map.Marker
-
 description: Google Maps with MooTools
-
 license: MIT-style license
-
 authors:
   - Ciul
   - Thomas Allmer
-
 requires: [Map]
-
 provides: [Map.Marker]
 
 ...
@@ -25,25 +20,25 @@ Map.Marker = new Class({
 		// use all options from http://code.google.com/apis/maps/documentation/javascript/reference.html#MarkerOptions
 		visible: true
 	},
-	
+
 	subObjectMapping: {
 		'this.markerObj': {
-			functions: ['getPosition', 'setOptions'],
+			functions: ['setOptions'],
 			properties: ['animation', 'clickable', 'cursor', 'draggable', 'flat', 'icon', 'map', 'shadow', 'shape', 'title', 'visible', 'zIndex'],
 			eventOptions: { instance: 'google.maps.event', addFunction: 'addListener', addObjectAsParam: true },
 			events: ['animation_changed', 'click', 'clickable_changed', 'cursor_changed', 'dblclick', 'drag', 'dragend', 'draggable_changed', 'dragstart', 'flat_changed', 'icon_changed', 'mousedown', 'mouseout', 'mouseover', 'mouseup', 'position_changed', 'rightclick', 'shadow_changed', 'shape_changed', 'title_changed', 'visible_changed', 'zindex_changed']
 		}
 	},
-
 	markerObj: null,
-	
+
 	initialize: function (position, map, options) {
 		this.setOptions(options);
 		this.initOptions();
+		this.map = map;
+		this.options.map = map.mapObj;
 		
 		// we can't use position or map with options, as it is needed as a reference and not as a copy like setOptions would create it
 		this.options.position = typeOf(position) === 'array' ? position.toLatLng() : position;
-		this.options.map = map;
 		
 		this.markerObj = new google.maps.Marker(this.options);
 		this.mapToSubObject();
@@ -90,7 +85,7 @@ Map.Marker = new Class({
 		if (typeOf(this.options.icon) === 'string' && this.options.icon.lenght > 0) {
 			this.options.icon = new google.maps.MarkerImage(this.options.icon.url);
 		}
-		
+
 		if (typeOf(this.options.shadow) === 'object') {
 			this.options.shadow.size = typeOf(this.options.shadow.size) === 'array' ? this.options.shadow.size.toSize() : this.options.shadow.size;
 			this.options.shadow.origin = typeOf(this.options.shadow.origin) === 'array' ? this.options.shadow.origin.toPoint() : this.options.shadow.origin;
@@ -102,12 +97,16 @@ Map.Marker = new Class({
 			this.options.shadow = new google.maps.MarkerImage(this.options.shadow.url);
 		}
 	},
-	
+
 	hide: function() {
 		this.setVisible(false);
 	},
 
-	show: function() {
+	show: function(animation, duration) {
+		var duration = duration || 1500,
+			animation = animation === 'drop' ? google.maps.Animation.DROP : animation === 'bounce' ? google.maps.Animation.BOUNCE : null;
+		this.setAnimation(animation);
+		(function() { this.setAnimation(null); }).delay(duration, this);
 		this.setVisible(true);
 	},
 
@@ -123,12 +122,17 @@ Map.Marker = new Class({
 		this.setMap(null);
 		this.markerObj = null;
 	},
-	
+
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/
-	
+
 	setPosition: function(point) {
 		var point = typeOf(point) === 'array' ? point.toLatLng() : point;
 		this.markerObj.setPosition(point);
+	},
+
+	getPosition: function() {
+		var point = this.markerObj.getPosition();
+		return [point.lat(), point.lng()];
 	}
 
 });
@@ -136,23 +140,33 @@ Map.Marker = new Class({
 Map.implement({
 
 	markers: [],
-	
+
+	options: {
+		markerOptions: {}
+	},
+
 	createMarker: function(position, options) {
-		var marker = new Map.Marker(position, this.mapObj, options);
-		this.markers.push(marker);
+		var options = Object.merge(Object.clone(this.options.markerOptions), options);
+		var marker = new Map.Marker(position, this, options);
+		this.addMarker(marker);
 		return marker;
 	},
-	
+
 	getMarkers: function() {
 		return this.markers;
 	},
-	
+
 	setMarkers: function(markers) {
 		this.markers = markers;
 	},
-	
+
+	addMarker: function(marker) {
+		this.fireEvent('markerAdded', marker);
+		return this.markers.push(marker);
+	},
+
 	zoomToMarkers: function(markers, useOnlyVisible) {
-		var markers = markers || this.markers, useOnlyVisible = useOnlyVisible || true;
+		var markers = markers || this.getMarkers(), useOnlyVisible = useOnlyVisible || true;
 		markers = useOnlyVisible ? markers.filter(function(marker) { return marker.getVisible(); }) : markers;
 		if (markers.length > 0) {
 			var bounds = [markers[0].getPosition(), markers[0].getPosition()].toLatLngBounds();
