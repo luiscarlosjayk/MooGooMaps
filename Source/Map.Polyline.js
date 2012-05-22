@@ -24,75 +24,123 @@ Map.PolyLine = new Class({
 	options: {
 		// use all options from http://code.google.com/apis/maps/documentation/javascript/reference.html#PolylineOptions
 	},
-	
+
 	subObjectMapping: {
 		'this.polyLineObj': {
-			functions: ['getPath', 'setOptions'],
+			functions: ['setOptions'],
 			properties: ['map'],
 			eventOptions: { instance: 'google.maps.event', addFunction: 'addListener', addObjectAsParam: true },
 			events: ['click', 'dblclick', 'mousedown', 'mousemove', 'mouseout', 'mouseover', 'mouseup', 'rightclick']
 		}
 	},
-		
+
 	polyLineObj: null,
-	
-	initialize: function (path, map, options) {
+	startPoint: false,
+
+	initialize: function (map, path, options) {
 		this.setOptions(options);
-		
+		this.map = map;
+		this.options.map = map.mapObj;
+		if (path) {
+			this.init(path, map);
+		}
+	},
+
+	init: function(path) {
 		this.options.path = typeOf(path) === 'array' ? path.toLatLng() : path;
-		this.options.map = map;
-		
 		this.polyLineObj = new google.maps.Polyline(this.options);
 		this.mapToSubObject();
 	},
-	
+
 	// Adds one element to the end of the array and returns the new length of the array.
-	addLine: function(point) {
-		var point = typeOf(point) === 'array' ? point.toLatLng() : point;
-		return this.getPath().push(point);
+	addPoint: function(point) {
+		var point = typeOf(point) === 'array' ? point.toLatLng() : point, count = 0;
+		if (!this.startPoint) {
+			this.startPoint = point;
+		} else {
+			if (!this.polyLineObj) {
+				this.init([this.startPoint, point], this.options);
+				count = 2;
+			} else {
+				count = this.polyLineObj.getPath().push(point);
+			}
+			this.fireEvent('addPoint', this.getLastPoint());
+		}
+		return count;
+	},
+
+	getEncodedPath: function(path) {
+		var path = path || this.polyLineObj.getPath();
+		return google.maps.geometry.encoding.encodePath(path);
+	},
+
+	decodePath: function(path) {
+		return this.getPath(google.maps.geometry.encoding.decodePath(path));
+	},
+
+	setEncodedPath: function(path) {
+		var path = path || this.polyLineObj.getPath();
+		this.setPath(this.decodePath(path));
 	},
 
 	// Inserts an element at the specified index.
-	insertLineAt: function(index, point) {
+	insertPointAt: function(index, point) {
 		var point = typeOf(point) === 'array' ? point.toLatLng() : point;
-		this.getPath().insertAt(index, point);
+		this.polyLineObj.getPath().insertAt(index, point);
 	},
 
 	// Removes the last element of the array and returns that element.
-	removeLastLine: function() {
-		return this.getPath().pop();
+	removeLastPoint: function() {
+		return this.polyLineObj.getPath().pop();
+	},
+
+	setLastPoint: function(point) {
+		this.setPointAt(this.getLength()-1, point);
+	},
+
+	getLastPoint: function() {
+		return this.getPointAt(this.getLength()-1);
 	},
 
 	// Returns the number of elements in this array.
 	getLength: function() {
-		return this.getPath().getLength();
+		return this.polyLineObj ? this.polyLineObj.getPath().getLength() : this.startPoint ? 1 : 0;
 	},
 
 	// Removes an element from the specified index.
-	removetLineAt: function(index) {
-		this.getPath().removeAt(index); 
+	removePointAt: function(index) {
+		this.polyLineObj.getPath().removeAt(index); 
 	},
 
 	// Sets an element at the specified index.
-	setLineAt: function(index, point) {
+	setPointAt: function(index, point) {
 		var point = typeOf(point) === 'array' ? point.toLatLng() : point;
-		this.getPath().setAt(index, point);
+		return this.polyLineObj ? this.polyLineObj.getPath().setAt(index, point) : false;
 	},
 
 	// Get an element at the specified index.
-	getLineAt: function(index) {
-		return this.getPath().getAt(index);
+	getPointAt: function(index) {
+		var point = this.polyLineObj.getPath().getAt(index);
+		return [point.lat(), point.lng()];
 	},
 
 	// Clears the polyLine path.
 	clearPath: function() {
 		this.setPath([]);
 	},
-	
-	computeDistance: function() {
-		return Map.geometry.computeLength(this.getPath().getArray());
+
+	optimize: function(grain, givenPath) {
+		var path = givenPath || this.getPath(),
+			points = [path[0]],
+			grain = grain || 50;
+		path.each(function(pathPoint) {
+			if (points.getLast().distanceTo(pathPoint) > grain) {
+				points.push(pathPoint);
+			}
+		});
+		return givenPath ? points : this.setPath(points);
 	},
-	
+
 	hide: function() {
 		this.setMap(null);
 	},
@@ -113,20 +161,48 @@ Map.PolyLine = new Class({
 		this.setMap(null);
 		this.polyLineObj = null;
 	},
-	
+
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/
-	
+
 	setPath: function(path) {
 		var path = typeOf(path) === 'array' ? path.toLatLng() : path;
-		this.polyLineObj.setPath(path);
+		if (this.polyLineObj) {
+			this.polyLineObj.setPath(path);
+		} else {
+			this.init(path);
+		}
+	},
+
+	getPath: function(path) {
+		var arrayPath = [], path = path || this.polyLineObj.getPath().getArray();
+		Object.each(path, function(point) {
+			arrayPath.push([point.lat(), point.lng()]);
+		});
+		return arrayPath;
 	}
 
 });
 
 Map.implement({
-	
-	createPolyLine: function(path, options) {
-		return new Map.PolyLine(path, this.mapObj, options);
+
+	polyLines: [],
+
+	createPolyLine: function(options, path) {
+		var polyLine = new Map.PolyLine(this, path, options);
+		this.addPolyLine(polyLine);
+		return polyLine;
+	},
+
+	getPolyLines: function() {
+		return this.polyLines;
+	},
+
+	setPolyLines: function(polyLines) {
+		this.polyLines = polyLines;
+	},
+
+	addPolyLine: function(polyLine) {
+		return this.polyLines.push(polyLine);
 	}
 
 });
