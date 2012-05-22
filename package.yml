@@ -1,4 +1,14 @@
 name: MooGooMaps
+exports: "mootools-moogoomaps.js"
+web: "[mooforum.net](http://mooforum.net)"
+description: "MooTools Google Maps"
+license: "[MIT License](http://mootools.net/license.txt)"
+copyright: "&copy; [mooforum](http://mooforum.net)"
+authors: "[Thomas Allmer](http://mooforum.net)"
+
 author: Ciul
 category: Interface
-tags: [map, googlemaps, googlemap]
+tags: [map, googlemaps, googlemap, google]
+#docs: http://url.to.docs
+#demo: http://url.to.demo
+#current: 0.5
