@@ -36,7 +36,7 @@ Map.InfoWindow = new Class({
 			functions: ['close', 'getPosition', 'setOptions'],
 			properties: ['content', 'zIndex'],
 			eventOptions: { instance: 'google.maps.event', addFunction: 'addListener', addObjectAsParam: true },
-			events: ['closeclick', 'content_changed', 'domready', 'position_changed', 'zindex_changed']
+			events: ['closeclick', 'domready', 'position_changed', 'zindex_changed']
 		},
 		'this.getRequest()': {
 			events: ['success']
@@ -47,22 +47,35 @@ Map.InfoWindow = new Class({
 
 	initialize: function (position, options) {
 		this.setOptions(options);
+		this.initOptions();
 		
 		this.options.position = typeOf(position) === 'array' ? position.toLatLng() : position;
-		//this.options.pixelOffset = new google.maps.Size(10,10);
 		
 		this.infoWindowObj = new google.maps.InfoWindow(this.options);
 		
 		this.mapToSubObject();
+		this.mapManualEvents();
 	},
 	
+	initOptions: function() {
+		this.options.pixelOffset = typeOf(this.options.pixelOffset) === 'array' ? this.options.pixelOffset.toSize() : this.options.pixelOffset;
+	},
+
+	hide: function() {
+		this.close();
+	},
+
+	destroy: function() {
+		this.infoWindowObj = null;
+	},
+
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/
-	
+
 	setPosition: function(point) {
 		var point = typeOf(point) === 'array' ? point.toLatLng() : point;
 		this.infoWindowObj.setPosition(point);
 	},
-	
+
 	// MVC object is usually a marker.
 	open: function(map, MVCObject) {
 		this.infoWindowObj.open(map, MVCObject);
@@ -70,11 +83,18 @@ Map.InfoWindow = new Class({
 			this.setContent(this.options.content);
 			this.getRequest({url: this.options.url}).send();
 		}
+		this.fireEvent('open', this.getContent());
 	},
-	
+
 	getRequest: function(options) {
 		var options = Object.merge(this.options, options);
 		return this.request ? this.request.setOptions(options) : this.request = new Request.HTML(options);
+	},
+
+	mapManualEvents: function() {
+		google.maps.event.addListener(this.infoWindowObj, 'content_changed', function() {
+			this.fireEvent('content_changed', this.getContent());
+		}.bind(this));
 	}
 
 });

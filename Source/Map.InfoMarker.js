@@ -64,12 +64,29 @@ Map.InfoMarker = new Class({
 		}.bind(this));
 	},
 	
+	hide: function() {
+		this.marker.hide();
+		this.infoWindow.hide();
+	},
+
+	show: function(alsoOpenInfoWindow) {
+		this.marker.show();
+		if (alsoOpenInfoWindow === true) {
+			this.open();
+		}
+	},
+
+	destroy: function() {
+		this.marker.destroy();
+		this.infoWindow.destroy();
+	},
+	
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/
 	
 	// MVC object is usually a marker.
 	open: function(MVCObject) {
 		var MVCObject = MVCObject || this.marker.markerObj;
-		this.infoWindow.open(this.map, MVCObject);
+		this.infoWindow.open(this.map.mapObj, MVCObject);
 	},
 	
 	setPosition: function(point) {
@@ -111,8 +128,9 @@ Map.InfoMarker = new Class({
 Map.implement({
 	
 	createInfoMarker: function(position, options) {
-		var infoMarker = new Map.InfoMarker(position, this.mapObj, options);
-		this.markers.push(infoMarker);
+		var options = Object.merge(Object.clone(this.options.markerOptions), options);
+		var infoMarker = new Map.InfoMarker(position, this, options);
+		this.addMarker(infoMarker);
 		return infoMarker;
 	}
 
