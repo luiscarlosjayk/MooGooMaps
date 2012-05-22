@@ -2,17 +2,13 @@
 ---
 
 name: Map
-
 description: Google Maps with MooTools
-
 license: MIT-style license
-
 authors:
   - Ciul
   - Thomas Allmer
 
 requires: [Core/Class.Extras, SubObjectMapping]
-
 provides: [Map]
 
 ...
@@ -24,9 +20,11 @@ var Map = new Class({
 	options: {
 		// use all Options from http://code.google.com/apis/maps/documentation/javascript/reference.html#MapOptions
 		// markerOptions: {},
-		mapTypeId: 'roadmap',
+		mapTypeId: 'roadmap', // ['hybrid', 'roadmap', 'satellite', 'terrain']
 		zoom: 6,
-		plugins: {}
+		plugins: {},
+		maxZoom: 21,
+		minZoom: 0
 	},
 
 	subObjectMapping: {
@@ -34,7 +32,7 @@ var Map = new Class({
 			functions: ['getBounds', 'getCenter', 'getDiv', 'getProjection', 'panBy', 'setOptions'],
 			properties: ['mapTypeId', 'streetView', 'zoom', 'tilt', 'heading'],
 			eventOptions: { instance: 'google.maps.event', addFunction: 'addListener', addObjectAsParam: true },
-			events: ['bounds_changed', 'center_changed', 'click', 'dblclick', 'drag', 'dragend', 'dragstart', 'heading_changed', 'idle', 'maptypeid_changed', 'mousemove', 'mouseout', 'mouseover', 'projection_changed', 'resize', 'rightclick', 'tilesloaded', 'tilt_changed', 'zoom_changed'],
+			events: ['bounds_changed', 'center_changed', 'click', 'dblclick', 'drag', 'dragend', 'dragstart', 'heading_changed', 'idle', 'maptypeid_changed', 'mousemove', 'mouseout', 'mouseover', 'projection_changed', 'resize', 'rightclick', 'tilesloaded', 'tilt_changed', 'zoom_changed']
 		}
 	},
 
@@ -44,30 +42,30 @@ var Map = new Class({
 	initialize: function (mapContainer, center, options) {
 		this.mapContainer = $(mapContainer);
 		this.setOptions(options);
-
 		this.options.center = typeOf(center) === 'array' ? center.toLatLng() : center;
 		this.mapObj = new google.maps.Map(this.mapContainer, this.options);
-
 		this.mapToSubObject();
 
 		// load registered Plugins
 		this.plugins = Object.merge(this.plugins, this.options.plugins);
 		Object.each(this.plugins, function(plugin) {
-			if (plugin.html && plugin.onClick && !plugin.el) {
+			if (plugin.init) {
+				plugin.init.apply(this);
+			}
+			if (plugin.html && plugin.onClick) {
 				this.addControl(plugin.html, plugin.onClick, plugin.options);
 			}
-			else if (plugin.el) {
-				this.addControlElement(plugin.el, plugin.options);
+			if (plugin.element) {
+				this.addControlElement(plugin.element, plugin.options);
 			}
 		}, this);
 	},
 
 	addControl: function(html, userFunction, options) {
 		var wrapper = new Element('div');
-		var klass = options.klass ? options.klass : 'googleButton';
 		var el = new Element('div', {
 			html: html, 
-			'class': klass
+			'class': 'googleButton'
 		});
 		el.addEvent('click', userFunction.bind(this, el));
 		wrapper.grab(el);
@@ -82,6 +80,14 @@ var Map = new Class({
 
 	getMap: function() {
 		return this.mapObj;
+	},
+
+	getMaxZoom: function() {
+		return this.options.maxZoom;
+	},
+
+	getMinZoom: function() {
+		return this.options.minZoom;
 	},
 
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/

@@ -2,60 +2,45 @@
 ---
 
 name: Map.Extras
-
 description: Google Maps with MooTools
-
 license: MIT-style license
-
 authors:
   - Ciul
   - Thomas Allmer
 
-requires: [Core/Class.Extras, GoogleMaps/Base.LatLng]
-
+requires: [Core/Class.Extras, Map]
 provides: []
 
 ...
 */
 
-/*
---
-toArray function for google.maps.LatLng Class.
-It returns [lat,lng] coordinates into an array.
---
-*/
+/**
+ * toArray function for google.maps.LatLng Class.
+ * It returns [lat,lng] coordinates into an array.
+ */
 google.maps.LatLng.implement('toArray', function() {
 	return new Array(this.lat(), this.lng());
 });
 
-/*
---
-toArray function for google.maps.LatLngBounds Class.
-It returns a pair of arrays for SouthWest and NorthEast lat,lng coordinates respectively, into an array like this [[lat,lng],[lat,lng]].
---
-*/
+/**
+ * toArray function for google.maps.LatLngBounds Class.
+ * It returns a pair of arrays for SouthWest and NorthEast lat,lng coordinates respectively, into an array like this [[lat,lng],[lat,lng]].
+ */
 google.maps.LatLngBounds.implement('toArray', function() {
 	return new Array(this.getSouthWest().toArray(), this.getNorthEast().toArray());
 });
 
-/*
---
-
---
-*/
 Array.implement({
 
 	toLatLng: function() {
 		if (this.length == 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number' ) {
 			return new google.maps.LatLng(this[0], this[1]);
 		}
-
 		for (var i = 0, l = this.length; i < l; i++) {
 			if (typeOf(this[i]) === 'array') {
 				this[i] = this[i].toLatLng();
 			}
 		}
-
 		return this;
 	},
 
@@ -71,36 +56,57 @@ Array.implement({
 		}
 		return this;
 	},
-	
-	distanceTo: function(p2) {
-		if(this.length === 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number') {
-			if(typeOf(p2) === 'array' && p2.length === 2 && typeOf(p2[0]) === 'number' && typeOf(p2[1]) === 'number' ) {
-				return Map.geometry.computeDistanceBetween(this, p2);
+
+	toSize: function() {
+		if (this.length == 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number' ) {
+			return new google.maps.Size(this[0], this[1]);
+		}
+		return this;
+	},
+
+	toPoint: function() {
+		if (this.length == 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number' ) {
+			return new google.maps.Point(this[0], this[1]);
+		}
+		return this;
+	},
+
+	distanceTo: function(toPoint) {
+		if (this.length === 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number') && (typeOf(toPoint) === 'array' && toPoint.length === 2 && typeOf(toPoint[0]) === 'number' && typeOf(toPoint[1]) === 'number' ) {
+			if (google && google.maps && google.maps.geometry && google.maps.geometry.sperical) {
+				var fromPoint = this.toLatLng(), toPoint = toPoint.toLatLng();
+				return google.maps.geometry.spherical.computeDistanceBetween(fromPoint, toPoint);
+			}
+			return Map.geometry.computeDistanceBetween(this, toPoint);
+		}
+	},
+
+	equalTo: function(arr){
+		if (this.length !== arr.length) {
+			return false;
+		}
+		for (var i = this.length - 1; i >= 0; i--) {
+			if (this[i] !== arr[i]) {
+				return false;
 			}
 		}
-		return 0;
+		return true;
 	}
 
 });
 
-
-
 Map.geometry = {
-	
+
+  /**
+	 * Distance Between Points function
+	 * Calculates the distance between two latlng locations in meters.
+	 * @see http://www.movable-type.co.uk/scripts/latlong.html
+	 *
+	 * @param {google.maps.LatLng} p1 The first lat lng point.
+	 * @param {google.maps.LatLng} p2 The second lat lng point.
+	 * @return {number} The distance between the two points in km.
+	 */
 	computeDistanceBetween: function(p1, p2) {
-		/*
-		--
-			* Distance Between Points function
-			*
-			* Calculates the distance between two latlng locations in meters.
-			* @see http://www.movable-type.co.uk/scripts/latlong.html
-			*
-			* @param {google.maps.LatLng} p1 The first lat lng point.
-			* @param {google.maps.LatLng} p2 The second lat lng point.
-			* @return {number} The distance between the two points in km.
-		--
-		*/
-		
 		if (!p1 || !p2) {
 			return 0;
 		}
