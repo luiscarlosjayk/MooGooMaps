@@ -1,4 +1,4 @@
-name: MooGooMaps
+name: "MooGooMaps"
 exports: "mootools-moogoomaps.js"
 web: "[mooforum.net](http://mooforum.net)"
 description: "MooTools Google Maps"
@@ -12,3 +12,32 @@ tags: [map, googlemaps, googlemap, google]
 #docs: http://url.to.docs
 #demo: http://url.to.demo
 #current: 0.5
+
+sources:
+  - "Source/Class.SubObjectMapping.js"
+  - "Source/Class.XML2Js.js"
+  - "Source/Map.js"
+  - "Source/Map.Circle.js"
+  - "Source/Map.Extras.js"
+  - "Source/Map.FullScreenMarker.js"
+  - "Source/Map.Geocoder.js"
+  - "Source/Map.GroundOverlay.js"
+  - "Source/Map.InfoMarker.js"
+  - "Source/Map.InfoWindow.js"
+  - "Source/Map.Marker.js"
+  - "Source/Map.Opt_InfoMarker.js"
+  - "Source/Map.OverlayView.js"
+  - "Source/Map.Polygon.js"
+  - "Source/Map.PolyLine.Advanced.js"
+  - "Source/Map.PolyLine.Animated.js"
+  - "Source/Map.Polyline.js"
+  - "Source/Map.Rectangle.js"
+  - "Source/Map.XMLMap.js"
+  - "Source/Plugins/Map.Plugin.Bounds.js"
+  - "Source/Plugins/Map.Plugin.MarkerFilter.js"
+  - "Source/Plugins/Map.Plugin.Play.js"
+  - "Source/Plugins/Map.Plugin.Seeker.js"
+  - "Source/Behaviors/Behavior.Map.js"
+  - "Source/Behaviors/Behavior.Marker.js"
+  - "Source/Behaviors/Behavior.Point.js"
+  - "Source/Behaviors/Behavior.PolyLine.js"

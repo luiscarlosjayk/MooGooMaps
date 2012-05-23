@@ -26,7 +26,7 @@ Map.InfoMarker = new Class({
 		// use all options from http://code.google.com/apis/maps/documentation/javascript/reference.html#InfoWindowOptions
 		isOpen: false
 	},
-	
+
 	subObjectMapping: {
 		'this.infoWindow': {
 			functions: ['close', 'setOptions'],
@@ -45,25 +45,25 @@ Map.InfoMarker = new Class({
 
 	initialize: function (position, map, options) {
 		this.setOptions(options);
-		
+
 		this.options.position = typeOf(position) === 'array' ? position.toLatLng() : position;
 		this.map = map;
-		
+
 		this.infoWindow = new Map.InfoWindow(position, this.options);
 		this.marker = new Map.Marker(position, map, this.options);
-		
+
 		this.mapToSubObject();
 		this.mapManualEvents();
-		
+
 		if (this.options.isOpen === true) {
 			this.open();
 		}
-		
+
 		this.marker.addEvent('click', function() {
 			this.open();
 		}.bind(this));
 	},
-	
+
 	hide: function() {
 		this.marker.hide();
 		this.infoWindow.hide();
@@ -80,21 +80,21 @@ Map.InfoMarker = new Class({
 		this.marker.destroy();
 		this.infoWindow.destroy();
 	},
-	
+
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/
-	
+
 	// MVC object is usually a marker.
 	open: function(MVCObject) {
 		var MVCObject = MVCObject || this.marker.markerObj;
 		this.infoWindow.open(this.map.mapObj, MVCObject);
 	},
-	
+
 	setPosition: function(point) {
 		var point = typeOf(point) === 'array' ? point.toLatLng() : point;
 		this.infoWindow.setPosition(point);
 		this.marker.setPosition(point);
 	},
-	
+
 	// getPosition gives position of marker, should be the same in almost all cases
 	getPositionInfoWindow: function() {
 		this.infoWindow.getPosition();
@@ -103,11 +103,11 @@ Map.InfoMarker = new Class({
 	setZIndexInfoWindow: function(zIndex) {
 		this.marker.setZIndex(zIndex);
 	},
-	
+
 	getZIndexInfoWindow: function() {
 		return this.infoWindow.getZIndex();
 	},
-	
+
 	mapManualEvents: function() {
 		google.maps.event.addListener(this.marker, 'position_changed', function() {
 			this.fireEvent('marker_position_changed');
@@ -126,7 +126,7 @@ Map.InfoMarker = new Class({
 });
 
 Map.implement({
-	
+
 	createInfoMarker: function(position, options) {
 		var options = Object.merge(Object.clone(this.options.markerOptions), options);
 		var infoMarker = new Map.InfoMarker(position, this, options);

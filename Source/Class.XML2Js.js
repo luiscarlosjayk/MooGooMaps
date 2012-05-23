@@ -8,7 +8,7 @@ license: MIT-style
 authors:
 - Ciul
 
-requires: [core/Request, core/Class.Extras]
+requires: [Core/Request, Core/Class.Extras]
 
 provides: [XML2Object]
 
@@ -18,38 +18,38 @@ provides: [XML2Object]
 /*********************************** XML to Object Converter **********************************/
 
 var XML2Object = new Class({
-	
+
 	Implements: Events,
 	/*	Events:
 		complete: $empty,
 	*/
-	
+
 	/* Global variables */
 	xml: null,
 	text: null,
 	xmlObj: {},
 	xmlurl: null,
 	root: null,
-	
+
 	/* Initialize */
 	initialize: function(xmlurl) {
 		xmlurl = (xmlurl != undefined && typeof(xmlurl) == 'string')? xmlurl : '';
-		
-		this.xmlurl = xmlurl;		
+
+		this.xmlurl = xmlurl;
 		this.getRequest(xmlurl).send();
-		
+
 	},
-	
+
 	/********************** XML OBJECT methods **********************/
 	_recursive_traverse: function(node) {
-		
+
 		var attributes = new Object();
 		if(this.has_attributes(node)) {
 			Array.each(this.get_attributes(node), function(attribute, index) {
 				attributes[this.get_name(attribute)] = this.get_value(attribute);
 			}, this);
 		}
-		
+
 		var childNodes = new Array();
 		if(this.has_childNodes(node)) {
 			Array.each(this.get_childElements(node), function(child, index) {
@@ -57,26 +57,26 @@ var XML2Object = new Class({
 				childNodes.append([childNode]);
 			}, this);
 		}
-		
+
 		var obj = {
 			name: this.get_name(node),
 			value: this.get_value(node).split('\n')[0],
 			attributes: attributes,
 			childNodes: childNodes
 		};
-		
+
 		return obj;
 	},
-	
+
 	get_rootNode: function() {
 		return this.xml.documentElement;
 	},
-	
+
 	get_name: function(node) {
 		var name = node.nodeName;
 		return name;
 	},
-	
+
 	get_value: function(node) {
 		var value = '';
 		switch(this.get_type(node)) {
@@ -86,55 +86,55 @@ var XML2Object = new Class({
 			default:
 				value = node.nodeValue;
 		}
-		
+
 		// Convert string values to their respective type.
-		value = Number.from(value) !== null ? Number.from(value) : value; 
+		value = Number.from(value) !== null ? Number.from(value) : value;
 		value = value === "true" ? true : value;
 		value = value === "false" ? false : value;
-		
+
 		return value;
 	},
-	
+
 	get_type: function(node) {
 		var type = node.nodeType;
 		return type;
 	},
-	
+
 	has_childNodes: function(node) {
 		return (!!node.childNodes && node.childNodes.length != 0);
 	},
-	
+
 	get_children: function(node) {
 		if(this.has_childNodes(node)) {
 			var children = node.childNodes;
 			return children;
 		} else return null;
 	},
-	
+
 	get_childElements: function(node) {
 		var chel = this.get_children(node);
 		chel = this.filter_byType(chel, 1);
 		return chel;
 	},
-	
+
 	has_attributes: function(node) {
 		return (!!node.attributes && node.attributes.length != 0);
 	},
-	
+
 	get_attributes: function(node) {
 		if(this.has_attributes(node)) {
 			var attrs = node.attributes;
 			return attrs;
 		} else return null;
 	},
-	
+
 	get_attribute: function(node, attribute) {
 		if(this.has_attributes(node)) {
 			var attrValue = node.getAttribute(attribute);
 			return attrValue;
 		} else return null;
 	},
-	
+
 	collection_toArray: function(nodesCollection) {
 		var nodesArray = [];
 		Array.each(nodesCollection, function(node) {
@@ -144,7 +144,7 @@ var XML2Object = new Class({
 		}, this);
 		return nodesArray;
 	},
-	
+
 	filter_byType: function(nodes, type) {
 		type = (type != undefined && typeOf(type) == 'number')? type : 1;
 		var filteredNodes = this.xml.createElement('filteredNodes');
@@ -156,7 +156,7 @@ var XML2Object = new Class({
 		}
 		return filteredNodes.childNodes;
 	},
-	
+
 	get_fromPath: function(source, path) {
 		var parts = path.split('.');
 		for (var i = 0, l = parts.length; i < l; i++){
@@ -166,7 +166,7 @@ var XML2Object = new Class({
 		}
 		return source;
 	},
-	
+
 	set_toPath: function(source, path, val) {
 		var parts = key.split('.'),
 			source2 = source; // so we can return the object
@@ -182,7 +182,7 @@ var XML2Object = new Class({
 		// Return the modified object
 		return source2;
 	},
-	
+
 	// getRequest method
 	getRequest: function(xmlurl) {
 		var requestOptions = {
@@ -199,7 +199,7 @@ var XML2Object = new Class({
 			};
 		return this.request ? this.request.setOptions(requestOptions) : this.request = new Request(requestOptions);
 	},
-	
+
 	/********************** EVENTS **********************/
 	complete: function() {
 		var obj = {
@@ -207,10 +207,10 @@ var XML2Object = new Class({
 			text: this.text,
 			xml: this.xml
 		};
-		
+
 		this.fireEvent('complete', obj);
 	}
-	
+
 });
 
 /*********************************** /XML to Object Converter **********************************/

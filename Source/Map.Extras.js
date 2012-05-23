@@ -72,7 +72,7 @@ Array.implement({
 	},
 
 	distanceTo: function(toPoint) {
-		if (this.length === 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number') && (typeOf(toPoint) === 'array' && toPoint.length === 2 && typeOf(toPoint[0]) === 'number' && typeOf(toPoint[1]) === 'number' ) {
+		if ((this.length === 2 && typeOf(this[0]) === 'number' && typeOf(this[1]) === 'number') && (typeOf(toPoint) === 'array' && toPoint.length === 2 && typeOf(toPoint[0]) === 'number' && typeOf(toPoint[1]) === 'number' )) {
 			if (google && google.maps && google.maps.geometry && google.maps.geometry.sperical) {
 				var fromPoint = this.toLatLng(), toPoint = toPoint.toLatLng();
 				return google.maps.geometry.spherical.computeDistanceBetween(fromPoint, toPoint);
@@ -110,10 +110,10 @@ Map.geometry = {
 		if (!p1 || !p2) {
 			return 0;
 		}
-		
+
 		p1 = typeOf(p1) === 'array' ? p1.toLatLng() : p1;
 		p2 = typeOf(p2) === 'array' ? p2.toLatLng() : p2;
-		
+
 		var R = 6378137; // Radius of the Earth in meters.
 		var dLat = (p2.lat() - p1.lat()) * Math.PI / 180;
 		var dLon = (p2.lng() - p1.lng()) * Math.PI / 180;
@@ -124,22 +124,22 @@ Map.geometry = {
 		var d = R * c;
 		return d;
 	},
-	
+
 	computeLength: function(path) {
 		if(path.length < 2) {return 0;}
-		
+
 		if(typeOf(path) === 'array' && path.every(function(item) {return typeOf(item) === 'array';}) ) {
 			path.each(function(item, index) {path[index] = item.toLatLng();}, path);
 		}
-		
+
 		var distance = 0;
 		for(var i = 1, l = path.length; i<l; i++) {
 			var p1 = path[i-1];
 			var p2 = path[i];
-			
+
 			distance = distance + Map.geometry.computeDistanceBetween(p1, p2);
 		}
-		
+
 		return distance;
 	}
 

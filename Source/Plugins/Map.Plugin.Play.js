@@ -10,7 +10,7 @@ license: MIT-style license
 authors:
   - Thomas Allmer
 
-requires: [Map, Map.Marker, Map.InfoWindow, Map.Rectangle, More/Events.Pseudos]
+requires: [Map.Marker, Map.InfoWindow, Map.Rectangle, More/Events.Pseudos]
 
 provides: [Map.Plugin.Play]
 
@@ -38,7 +38,7 @@ Map.implement({
 							content.getElement('audio').play();
 						}
 					});
-					
+
 					marker.addEvent('content_changed', function(content) {
 						var slide = marker.wrap.getElement('[data-behavior="Slide"]').getBehaviorResult('Slide');
 						slide.addEvent('finished', function() {
@@ -62,7 +62,7 @@ Map.implement({
 				//animatedElements[0].showEditMarkers();
 				var animatedElements = this.getPolyLinesAnimated();
 				if (!this.plugins.play.active) {
-				
+
 					if (!this.plugins.play.started) {
 						this.plugins.play.initAnimation.call(this, animatedElements);
 						animatedElements.invoke('start');
@@ -70,13 +70,13 @@ Map.implement({
 					} else {
 						animatedElements.invoke('resume');
 					}
-				
+
 					element.set('text', 'pause');
 					element.addClass('googleButtonActive');
 					this.plugins.play.active = true;
 				} else {
 					animatedElements.invoke('pause');
-				
+
 					element.set('text', 'play');
 					element.removeClass('googleButtonActive');
 					this.plugins.play.active = false;
@@ -92,7 +92,7 @@ Map.implement({
 								};
 								marker.addEvent('closeclick:once', close);
 								marker.wrap.getElement('[data-behavior="Slide"]').getBehaviorResult('Slide').addEvent('finished:once', close);
-								
+
 								marker.show(false, 'bounce');
 								(function() { marker.open(); }).delay(1500);
 								animatedElement.pause();
@@ -103,5 +103,5 @@ Map.implement({
 			}
 		}
 	}
-	
+
 });

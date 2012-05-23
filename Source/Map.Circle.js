@@ -24,7 +24,7 @@ Map.Circle = new Class({
 	options: {
 		// use all options from http://code.google.com/apis/maps/documentation/javascript/reference.html#CircleOptions
 	},
-	
+
 	subObjectMapping: {
 		'this.circleObj': {
 			functions: ['getBounds', 'getCenter', 'setOptions'],
@@ -38,16 +38,13 @@ Map.Circle = new Class({
 
 	initialize: function (center, radius, map, options) {
 		this.setOptions(options);
-
 		this.options.center = typeOf(center) === 'array' ? center.toLatLng() : center;
 		this.options.map = map;
 		this.options.radius = radius;
-		
 		this.circleObj = new google.maps.Circle(this.options);
-		
 		this.mapToSubObject();
 	},
-	
+
 	hide: function() {
 		this.setMap(null);
 	},
@@ -68,9 +65,9 @@ Map.Circle = new Class({
 		this.setMap(null);
 		this.circleObj = null;
 	},
-	
+
 	/*------------------------- CUSTOM MAPPING METHODS -------------------------*/
-	
+
 	setCenter: function(center) {
 		var center = typeOf(center) === 'array' ? center.toLatLng() : center;
 		this.circleObj.setCenter(center);
@@ -79,7 +76,7 @@ Map.Circle = new Class({
 });
 
 Map.implement({
-	
+
 	createCircle: function(center, radius, options) {
 		return new Map.Circle(center, radius, this.mapObj, options);
 	}

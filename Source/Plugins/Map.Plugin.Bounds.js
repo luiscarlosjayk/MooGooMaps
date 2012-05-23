@@ -10,7 +10,7 @@ license: MIT-style license
 authors:
   - Thomas Allmer
 
-requires: [Map, Map.Marker, Map.InfoWindow, Map.Rectangle]
+requires: [Map.Marker, Map.InfoWindow, Map.Rectangle]
 
 provides: [Map.Plugin.Bounds]
 
@@ -31,7 +31,7 @@ Map.implement({
 					var y = this.getBounds().toSpan().lng();
 					var point1 = [this.getCenter().lat() - x/8, this.getCenter().lng() - y/8];
 					var point2 = [this.getCenter().lat() + x/8, this.getCenter().lng() + y/8];
-				
+
 					if (!this.plugins.bounds.marker1 && !this.plugins.bounds.marker2 && !this.plugins.bounds.rectangle && !this.plugins.bounds.infoWindow) {
 						// create
 						var options = {
@@ -43,10 +43,10 @@ Map.implement({
 								this.plugins.bounds.infoWindow.close();
 							}.bind(this)
 						};
-						
+
 						this.plugins.bounds.marker1 = new Map.Marker(point1, this.mapObj, options);
 						this.plugins.bounds.marker2 = new Map.Marker(point2, this.mapObj, options);
-						
+
 						this.plugins.bounds.infoWindow = new Map.InfoWindow([0,0]);
 
 						this.plugins.bounds.rectangle = this.createRectangle([point1, point2], {
@@ -63,12 +63,12 @@ Map.implement({
 						this.plugins.bounds.marker1.setPosition(point1);
 						this.plugins.bounds.marker2.setPosition(point2);
 						this.plugins.bounds.rectangle.setBounds( [this.plugins.bounds.marker1.getPosition(), this.plugins.bounds.marker2.getPosition()].toLatLngBounds() );
-					
+
 						this.plugins.bounds.marker1.show();
 						this.plugins.bounds.marker2.show();
 						this.plugins.bounds.rectangle.show();
 					}
-				
+
 					el.addClass('googleButtonActive');
 					this.plugins.bounds.active = true;
 				} else {
@@ -78,12 +78,12 @@ Map.implement({
 						this.plugins.bounds.rectangle.hide();
 						this.plugins.bounds.infoWindow.close();
 					}
-				
+
 					el.removeClass('googleButtonActive');
 					this.plugins.bounds.active = false;
 				}
 			}
 		}
 	}
-	
+
 });
