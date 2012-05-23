@@ -8,7 +8,7 @@ authors:
   - Ciul
   - Thomas Allmer
 
-requires: [Core/Class.Extras, SubObjectMapping]
+requires: [Core/Class.Extras, Map.Extras, SubObjectMapping]
 provides: [Map]
 
 ...
@@ -64,7 +64,7 @@ var Map = new Class({
 	addControl: function(html, userFunction, options) {
 		var wrapper = new Element('div');
 		var el = new Element('div', {
-			html: html, 
+			html: html,
 			'class': 'googleButton'
 		});
 		el.addEvent('click', userFunction.bind(this, el));

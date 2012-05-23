@@ -8,8 +8,8 @@ authors:
   - Ciul
   - Thomas Allmer
 
-requires: [Core/Class.Extras, Map]
-provides: []
+requires: []
+provides: [Map.Extras]
 
 ...
 */

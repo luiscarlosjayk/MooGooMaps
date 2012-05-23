@@ -36,44 +36,44 @@ Map.Marker = new Class({
 		this.initOptions();
 		this.map = map;
 		this.options.map = map.mapObj;
-		
+
 		// we can't use position or map with options, as it is needed as a reference and not as a copy like setOptions would create it
 		this.options.position = typeOf(position) === 'array' ? position.toLatLng() : position;
-		
+
 		this.markerObj = new google.maps.Marker(this.options);
 		this.mapToSubObject();
 	},
-	
+
 	distanceTo: function(endPoint) { // You can pass a [lat, lng] array as well a marker as endPoint
 		if(typeOf(endPoint) === 'array' && endPoint.length === 2 && typeOf(endPoint[0]) === 'number' && typeOf(endPoint[1]) === 'number') {
 			return Map.geometry.computeDistanceBetween(this.getPosition(), endPoint);
 		}
-		
+
 		if(instanceOf(endPoint, Map.Marker) ) {
 			return Map.geometry.computeDistanceBetween(this.getPosition(), endPoint.getPosition());
 		}
-		
+
 		return 0;
 	},
-	
+
 	distanceThrough: function(pointsPath) {
-		
+
 		if(typeOf(pointsPath) === 'array') {
 			if(pointsPath.every(function(item) {return (typeOf(item) === 'array');}) && pointsPath.flatten().every(function(item) {return (typeOf(item) === 'number');}) ) {
 				pointsPath.unshift(this.getPosition().toArray());
 				return Map.geometry.computeLength(pointsPath);
 			}
-			
+
 			if(pointsPath.flatten().every(function(item) {return (instanceOf(item, Map.Marker));}) ) {
 				pointsPath.unshift(this);
 				pointsPath.each(function(item, index) {this[index] = item.getPosition().toArray()}, pointsPath);
 				return Map.geometry.computeLength(pointsPath);
 			}
 		}
-		
+
 		return 0;
 	},
-	
+
 	initOptions: function() {
 		if (typeOf(this.options.icon) === 'object') {
 			this.options.icon.size = typeOf(this.options.icon.size) === 'array' ? this.options.icon.size.toSize() : this.options.icon.size;
