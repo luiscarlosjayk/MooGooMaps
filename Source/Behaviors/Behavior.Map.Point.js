@@ -1,20 +1,20 @@
 /*
 ---
-name: Behavior.Point
+name: Behavior.Map.Point
 description: Adds a slide interface (Point instance)
 provides: [Behavior.Point]
 requires: [Behavior/Behavior, /Map.Point]
-script: Behavior.Point.js
+script: Behavior.Map.Point.js
 
 ...
 */
 
-Behavior.addGlobalFilter('Point', {
+Behavior.addGlobalFilter('Map.Point', {
 
 	required: ['position'],
 
 	defaults: {
-		target: '![data-behavior="PolyLine"]'
+		target: '![data-behavior="Map.PolyLine"]'
 	},
 
 	setup: function(element, api) {

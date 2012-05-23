@@ -1,15 +1,15 @@
 /*
 ---
-name: Behavior.Marker
-description: Adds a slide interface (Marker instance)
-provides: [Behavior.Marker]
+name: Behavior.Map.Marker
+description: Adds an Marker to a Map
+provides: [Behavior.Map.Marker]
 requires: [Behavior/Behavior, /Map.Marker, /Map.FullScreenMarker]
-script: Behavior.Marker.js
+script: Behavior.Map.Marker.js
 
 ...
 */
 
-Behavior.addGlobalFilter('Marker', {
+Behavior.addGlobalFilter('Map.Marker', {
 
 	require: ['position'],
 
@@ -17,7 +17,7 @@ Behavior.addGlobalFilter('Marker', {
 		target: '!div [data-behavior="Map"]',
 		type: 'Marker',
 		visible: true,
-		title: '',
+		title: ''
 	},
 
 	setup: function(element, api) {

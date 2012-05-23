@@ -1,15 +1,15 @@
 /*
 ---
-name: Behavior.PolyLine
-description: Adds a slide interface (PolyLine instance)
-provides: [Behavior.PolyLine]
+name: Behavior.Map.PolyLine
+description: Adds a PolyLine to a Map
+provides: [Behavior.Map.PolyLine]
 requires: [Behavior/Behavior, /Map.PolyLine, /Map.PolyLine.Animated, /Map.PolyLine.Advanced]
 script: Behavior.PolyLine.js
 
 ...
 */
 
-Behavior.addGlobalFilter('PolyLine', {
+Behavior.addGlobalFilter('Map.PolyLine', {
 
 	defaults: {
 		target: '!div [data-behavior="Map"]',
