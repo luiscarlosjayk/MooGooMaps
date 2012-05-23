@@ -16,9 +16,10 @@ tags: [map, googlemaps, googlemap, google]
 sources:
   - "Source/Class.SubObjectMapping.js"
   - "Source/Class.XML2Js.js"
+  - "Source/Google.Maps.Api.js"
   - "Source/Map.js"
   - "Source/Map.Circle.js"
-  - "Source/Map.Extras.js"
+  - "Source/Map.Functions.js"
   - "Source/Map.FullScreenMarker.js"
   - "Source/Map.Geocoder.js"
   - "Source/Map.GroundOverlay.js"

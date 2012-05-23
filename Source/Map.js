@@ -8,7 +8,7 @@ authors:
   - Ciul
   - Thomas Allmer
 
-requires: [Core/Class.Extras, Map.Extras, SubObjectMapping]
+requires: [Core/Class.Extras, Map.Functions, SubObjectMapping]
 provides: [Map]
 
 ...

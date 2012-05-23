@@ -44,34 +44,9 @@ Map.Marker = new Class({
 		this.mapToSubObject();
 	},
 
-	distanceTo: function(endPoint) { // You can pass a [lat, lng] array as well a marker as endPoint
-		if(typeOf(endPoint) === 'array' && endPoint.length === 2 && typeOf(endPoint[0]) === 'number' && typeOf(endPoint[1]) === 'number') {
-			return Map.geometry.computeDistanceBetween(this.getPosition(), endPoint);
-		}
-
-		if(instanceOf(endPoint, Map.Marker) ) {
-			return Map.geometry.computeDistanceBetween(this.getPosition(), endPoint.getPosition());
-		}
-
-		return 0;
-	},
-
-	distanceThrough: function(pointsPath) {
-
-		if(typeOf(pointsPath) === 'array') {
-			if(pointsPath.every(function(item) {return (typeOf(item) === 'array');}) && pointsPath.flatten().every(function(item) {return (typeOf(item) === 'number');}) ) {
-				pointsPath.unshift(this.getPosition().toArray());
-				return Map.geometry.computeLength(pointsPath);
-			}
-
-			if(pointsPath.flatten().every(function(item) {return (instanceOf(item, Map.Marker));}) ) {
-				pointsPath.unshift(this);
-				pointsPath.each(function(item, index) {this[index] = item.getPosition().toArray()}, pointsPath);
-				return Map.geometry.computeLength(pointsPath);
-			}
-		}
-
-		return 0;
+	distanceTo: function(endPoint) {
+		var endPoint = typeOf(endPoint) === 'array' ? endPoint : endPoint.getPosition();
+		return this.getPosition().distanceTo(endPoint);
 	},
 
 	initOptions: function() {
